@@ -2,12 +2,11 @@ import tkinter as tk
 from tkinter import Frame, ttk
 from tkinter.messagebox import showinfo
 from tkinter.constants import END, LEFT, TOP
-from videorentalshop import VideoController,Movie,Customer
+from videorentalshop import VideoController
 
 company = VideoController()
-#create a new window
 shop = tk.Tk()
-shop.title("Lincoln Video Rental")
+shop.title("Lincoln Video Rental Shop")
 shop.geometry("500x700")
 
 cName = ["Jaime Rogers","John Doe", "Angela Peters",
@@ -28,6 +27,7 @@ for amovie in movies:
     for year in mYear:
         company.addmovie(amovie,year)
 
+# require to select customer name and movie name to rent
 def button_rent():
     # selected customer 
     selCustomerIndex = cList.curselection()
@@ -35,18 +35,28 @@ def button_rent():
     # selected movie
     selMovieIndex = mList.curselection()
     selectedMovie = mList.get(selMovieIndex)
-    company.rental_movie(str(selectedMovie),str(selectedCustomer))
-    showinfo(title="Rented", message="Success!"  )
+    # if movie has been rented, return false
+    if company.rental_movie(str(selectedMovie),str(selectedCustomer)) == False:
+        showinfo(title="Error", message="Movie has been rented!")
+    else:
+        # show customer name and rented movie
+        showinfo(title="Success", message= selectedCustomer + " Rents: " + selectedMovie )
 
+
+# only require to select the movie name to return 
 def button_return():
     # selected movie
     selMovieIndex = mList.curselection()
     selectedMovie = mList.get(selMovieIndex)
-    company.return_movie(str(selectedMovie))
-    showinfo(title="Returned", message="Success!")
+    if company.return_movie(str(selectedMovie)) == False:
+        showinfo(title="Error", message="Error"  )
+    else:
+        # show movie name is returned
+        showinfo(title="Success", message= selectedMovie + " is Returned!")
 
+
+# display customer's detail
 def customer_detail():
-    # display customer's detail
     selCustomerIndex = cList.curselection()
     selectedCustomer = cList.get(selCustomerIndex)
     customer = company.find_customer(selectedCustomer)
@@ -55,20 +65,19 @@ def customer_detail():
     city = customer.city
     # if no rented movie, return Rented Movie is None
     if rentedMovieList == []:
-        print("x")
         msg = "--------------------------\n" + str(customer.name) + "\nCity:" + str(city) + "\nBalance:" + str(balance) + "\nRented Movie: None \n"
         cDText.insert(tk.END, msg)
     else:
-        print("y")
         msg = "--------------------------\n" + str(customer.name) + "\nCity:" + str(city) + "\nBalance:" + str(balance) + "\nRented Movie:"  + "\n" 
         cDText.insert(tk.END, msg)
+        # print rented movie list
         for rentedMovie in rentedMovieList:
             print(rentedMovie)
             cDText.insert(tk.END,rentedMovie)
             cDText.insert(tk.END,"\n")
 
+# display movie's detail
 def movie_detail():
-    # display movie's detail
     selMovieIndex = mList.curselection()
     selectedMovie = mList.get(selMovieIndex)
     movie = company.find_movie(selectedMovie)
@@ -92,7 +101,7 @@ lblCustomer = ttk.Label(master=form1, text="Customer")
 lblCustomer.pack(ipadx=5, ipady=5, side=TOP)
 
 # customer list
-cList = tk.Listbox(master=form1,exportselection=0, selectmode=tk.BROWSE)
+cList = tk.Listbox(master=form1, exportselection=0, selectmode=tk.BROWSE)
 cList.pack(ipadx=5, ipady=5,padx=10)
 for acustomer in cName:
     cList.insert(tk.END,acustomer)
@@ -101,19 +110,20 @@ lblMovie = ttk.Label(master=form2, text="Movie")
 lblMovie.pack(ipadx=5, ipady=5, side=TOP)
 
 # movie list
-mList = tk.Listbox(master=form2,width=25 , exportselection=0, selectmode=tk.BROWSE)
+mList = tk.Listbox(master=form2,width=25, exportselection=0, selectmode=tk.BROWSE)
 mList.pack(ipadx=5, ipady=5,padx=10)
 for amovie in movies:
     mList.insert(tk.END,amovie)
 
+# button Frame
 form3 = tk.Frame(relief=tk.FLAT,border=3)
 form3.pack(padx=5, pady=5)
 
 btnRent = ttk.Button(master=form3, text="Rent", command=button_rent)
-btnRent.pack(ipadx=10,side=LEFT)
+btnRent.pack(ipadx=10,padx=10, side=LEFT)
 
 btnReturn = ttk.Button(master=form3, text="Return", command=button_return)
-btnReturn.pack(ipadx=10,side=LEFT)
+btnReturn.pack(ipadx=10,padx=10, side=LEFT)
 
 # customer detail frame display
 form4 = tk.Frame(relief=tk.FLAT,border=3)
@@ -134,6 +144,5 @@ btnmDetail.pack(ipadx=28, ipady=5,side=LEFT)
 
 mDText = tk.Text(master=form5, height=8, width=30)
 mDText.pack(padx=10, pady=5, side=LEFT)
-
 
 shop.mainloop()

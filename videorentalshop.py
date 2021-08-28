@@ -47,8 +47,8 @@ class Movie:
     def __str__(self):
         return self.__movie
 
-    # def __eq__(self, other):
-    #     return self.Movie == other.Movie
+    def __eq__(self, other):
+        return self.Movie == other.Movie
 
 class Customer:
     #constructor
@@ -195,16 +195,4 @@ class VideoController:
         
             
 
-Hansel = Movie("Hansel and Gretel","2012")
-Hansel.__status = "Jamie Rogers"
-print(Hansel)
-print(Hansel.fee)
-print(Hansel.__status)
-print(Hansel.movie_status)
-C1 = Customer("Jaime Rogers","Lincoln")
-print(C1)
-
-print(C1.balance)
-C1.balance = "1.0"
-print(C1.balance)
 
