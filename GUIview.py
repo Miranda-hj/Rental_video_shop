@@ -9,23 +9,31 @@ shop = tk.Tk()
 shop.title("Lincoln Video Rental Shop")
 shop.geometry("500x700")
 
-cName = ["Jaime Rogers","John Doe", "Angela Peters",
-"Richard Reed", "Mark Lee","Stephen Freeman"]
-cCity = ["Christchurch","Lincoln","Christchurch","Christchurch","Lincoln"]
+# read file 
+f_customer = open('./video_rental_shop_OOP_GUi/Customer.txt','r')
+customer = f_customer.readlines()
 
-movies = ["Hansel and Gretel", "Pitch Perfect", 
-"The Shawshank Redemption", "The Godfather", 
-"Pulp Fiction","The Dark Knight", 
-"Forrest Gump", "The Avengers"]
-mYear = ["2012","2012","1994","1972","1994","2008","1994","2012"]
+f_movie = open('./video_rental_shop_OOP_GUi/Video.txt','r')
+movie = f_movie.readlines()
 
-# add customer and movie to videocontroller's list
-for acustomer in cName:
-    for city in cCity:
-        company.addcustomer(acustomer,city)
-for amovie in movies:
-    for year in mYear:
-        company.addmovie(amovie,year)
+# add customer 
+for line in customer:
+    # remove the line break and space, transfor the string to list
+    customer_list = line.replace('\n', '').replace(", ", ",").split(",")
+    print(customer_list)
+    acustomer = customer_list[0]
+    city = customer_list[1]
+    payment = customer_list[2]
+    company.addcustomer(acustomer,city)
+
+# add movie
+for line in movie:
+    movie_list = line.replace('\n', '').replace(", ", ",").split(",")
+    mName = movie_list[0]
+    print(mName)
+    year = movie_list[1]
+    status = movie_list[2]
+    company.addmovie(mName,year)
 
 # require to select customer name and movie name to rent
 def button_rent():
@@ -61,18 +69,17 @@ def customer_detail():
     selectedCustomer = cList.get(selCustomerIndex)
     customer = company.find_customer(selectedCustomer)
     rentedMovieList = customer.cMovie
-    balance = customer.balance
+    payment = customer.payment
     city = customer.city
     # if no rented movie, return Rented Movie is None
     if rentedMovieList == []:
-        msg = "--------------------------\n" + str(customer.name) + "\nCity:" + str(city) + "\nBalance:" + str(balance) + "\nRented Movie: None \n"
+        msg = "--------------------------\nName: " + str(customer.name) + "\nCity: " + str(city) + "\nTotal Payment: $" + str(payment) + "\nRented Movie: None \n"
         cDText.insert(tk.END, msg)
     else:
-        msg = "--------------------------\n" + str(customer.name) + "\nCity:" + str(city) + "\nBalance:" + str(balance) + "\nRented Movie:"  + "\n" 
+        msg = "--------------------------\nName: " + str(customer.name) + "\nCity: " + str(city) + "\nTotal Payment: $" + str(payment) + "\nRented Movie:"  + "\n" 
         cDText.insert(tk.END, msg)
         # print rented movie list
         for rentedMovie in rentedMovieList:
-            print(rentedMovie)
             cDText.insert(tk.END,rentedMovie)
             cDText.insert(tk.END,"\n")
 
@@ -84,7 +91,7 @@ def movie_detail():
     status = movie.movie_status
     fee = movie.fee
     year = movie.year
-    msg = "--------------------------\n" + str(movie.Movie) + "\nYear:" + str(year) + "\nStatus:" + str(status) + "\nFee:" + str(fee) + "\n"
+    msg = "--------------------------\nName: " + str(movie.Movie) + "\nYear:" + str(year) + "\nStatus:" + str(status) + "\nFee:" + str(fee) + "\n"
     mDText.insert(tk.END, msg)
 
 form = tk.Frame(relief=tk.FLAT,border=3)
@@ -103,8 +110,13 @@ lblCustomer.pack(ipadx=5, ipady=5, side=TOP)
 # customer list
 cList = tk.Listbox(master=form1, exportselection=0, selectmode=tk.BROWSE)
 cList.pack(ipadx=5, ipady=5,padx=10)
-for acustomer in cName:
-    cList.insert(tk.END,acustomer)
+
+# insert customer name to the listbox
+for line in customer:
+    # remove the line break and space, transfor string to list
+    customer_list = line.replace('\n', '').replace(", ", ",").split(",")
+    acustomer = customer_list[0]
+    cList.insert(tk.END, acustomer)
 
 lblMovie = ttk.Label(master=form2, text="Movie")
 lblMovie.pack(ipadx=5, ipady=5, side=TOP)
@@ -112,8 +124,12 @@ lblMovie.pack(ipadx=5, ipady=5, side=TOP)
 # movie list
 mList = tk.Listbox(master=form2,width=25, exportselection=0, selectmode=tk.BROWSE)
 mList.pack(ipadx=5, ipady=5,padx=10)
-for amovie in movies:
-    mList.insert(tk.END,amovie)
+
+# insert movie name to the listbox
+for line in movie:
+    movie_list = line.replace('\n', '').replace(", ", ",").split(",")
+    mName = movie_list[0]
+    mList.insert(tk.END, mName)
 
 # button Frame
 form3 = tk.Frame(relief=tk.FLAT,border=3)

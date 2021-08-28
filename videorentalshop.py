@@ -7,8 +7,8 @@ class Movie:
         self.__mFee = 5.0
         # $5 for each movie
         self.__year = year
-        # two different status: 'hold', 'owner's mobile'
-        self.__status = "Hold" 
+        # two different status: if it's available shows 'Available', otherwise shows 'owner's name'
+        self.__status = "Available" 
 
     @property
     def movie_status(self):
@@ -55,12 +55,12 @@ class Customer:
     def __init__(self,name,city):
         self.__cName = name
         self.__cCity = city
-        self.__balance = 0.0
+        self.__payment = 0.0
         self.__cMovie = []
     
-    # diplay customer rental balance
-    def rental_balance(self):
-        return self.__balance
+    # diplay customer rental payment
+    def rental_payment(self):
+        return self.__payment
 
     # add movie to the rented list
     def add_movie(self,movie):
@@ -71,12 +71,12 @@ class Customer:
         self.__cMovie.remove(movie)
 
     @property
-    def balance(self):
-        return self.__balance
+    def payment(self):
+        return self.__payment
 
-    @balance.setter
-    def balance(self,value):
-        self.__balance = value
+    @payment.setter
+    def payment(self,value):
+        self.__payment = value
     
     @property
     def name(self):
@@ -105,7 +105,7 @@ class Customer:
             print(movie)
 
     def __str__(self):
-        return self.__cName + " " + self.city + " " + str(self.balance)
+        return self.__cName + " " + self.city + " " + str(self.payment)
         
 class VideoController:
     #constructor
@@ -113,6 +113,9 @@ class VideoController:
         self.customerlist = []
         self.movielist =[]
 
+    def a (self):
+        return self.customerlist
+        
         #add a new customer
     def addcustomer(self,name,city):
         aCustomer=Customer(name,city)
@@ -141,27 +144,27 @@ class VideoController:
     def return_movie(self,movie):
         fmovie = self.find_movie(movie)
         owner = fmovie.movie_status
-        if owner == "Hold":
+        if owner == "Available":
             print("DO not need to return")
             return False
         else:
             preOwner = self.find_customer(owner)
             preOwner.remove_movie(fmovie)
-            fmovie.movie_status = "Hold"
+            fmovie.movie_status = "Available"
 
         # rent movie 
     def rental_movie(self,movie,name):
         movie = self.find_movie(movie)
         customer = self.find_customer(name)
         mFee = movie.fee
-        preBalance = customer.balance
-        balance = preBalance - mFee
-        print(balance)
-        if  movie.movie_status == 'Hold':
+        prePayment = customer.payment
+        payment = prePayment + mFee
+        print(payment)
+        if  movie.movie_status == 'Available':
             movie.movie_status = customer.name
             customer.add_movie(movie)
             print(movie.movie_status)
-            customer.balance = balance
+            customer.payment = payment
         else:
             print("Movie has been rented!")
             return False
@@ -183,16 +186,13 @@ class VideoController:
         print("Rented Movie:")
         for rentedMovie in rentedMovieList:
             print(rentedMovie) 
-        balance = displayCustomer.balance
-        print("Balance:", balance)
+        payment = displayCustomer.payment
+        print("Payment:", payment)
         
         
-        # track customer's balance
-    def trackBalance(self,name):
+        # track customer's payment
+    def trackpayment(self,name):
         cName = self.find_customer(name)
-        balance = cName.fee
-        print (cName + ':' + balance)
+        payment = cName.fee
+        print (cName + ':' + payment)
         
-            
-
-
