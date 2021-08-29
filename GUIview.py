@@ -9,22 +9,24 @@ shop = tk.Tk()
 shop.title("Lincoln Video Rental Shop")
 shop.geometry("500x700")
 
-# read file 
+# read file
 f_customer = open('./video_rental_shop_OOP_GUi/Customer.txt','r')
 customer = f_customer.readlines()
 
 f_movie = open('./video_rental_shop_OOP_GUi/Video.txt','r')
 movie = f_movie.readlines()
 
-# add customer 
+
+    # add customer 
 for line in customer:
     # remove the line break and space, transfor the string to list
     customer_list = line.replace('\n', '').replace(", ", ",").split(",")
     print(customer_list)
     acustomer = customer_list[0]
     city = customer_list[1]
-    payment = customer_list[2]
-    company.addcustomer(acustomer,city)
+    tPayment = float(customer_list[2])
+    company.addcustomer(acustomer,city,tPayment)
+    # acustomer.payment = tPayment
 
 # add movie
 for line in movie:
@@ -33,7 +35,14 @@ for line in movie:
     print(mName)
     year = movie_list[1]
     status = movie_list[2]
-    company.addmovie(mName,year)
+    if status == "true":
+        company.addmovie(mName,year,"Available")
+    else:
+        company.addmovie(mName,year,"Unavailable")
+    
+# close file      
+f_customer.close()
+f_movie.close()
 
 # require to select customer name and movie name to rent
 def button_rent():

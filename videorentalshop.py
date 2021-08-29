@@ -112,18 +112,17 @@ class VideoController:
     def __init__(self):
         self.customerlist = []
         self.movielist =[]
-
-    def a (self):
-        return self.customerlist
         
         #add a new customer
-    def addcustomer(self,name,city):
+    def addcustomer(self,name,city,payment):
         aCustomer=Customer(name,city)
+        aCustomer.payment = payment
         self.customerlist.append(aCustomer)
 
         #add a new movie
-    def addmovie(self,movie,year):
+    def addmovie(self,movie,year,status):
         aMovie=Movie(movie,year)
+        aMovie.movie_status = status
         self.movielist.append(aMovie)
     
         # search for a customer
