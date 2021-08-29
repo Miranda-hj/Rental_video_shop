@@ -40,9 +40,7 @@ class Movie:
 
     # display movie's detail 
     def movieDetail(self):
-        print(self.__movie + " " + self.__year + " " + self.__mFee + " " + self.__status)
-        for movie in self.Movie:
-            print(movie)
+        print(self.__movie + " " + str(self.__year) + " " + str(self.__mFee) + " " + self.__status)
 
     def __str__(self):
         return self.__movie
@@ -94,7 +92,6 @@ class Customer:
     def city(self,value):
         self.__cCity = value
     
-
     @property
     def cMovie(self):
         return self.__cMovie
@@ -157,12 +154,10 @@ class VideoController:
         customer = self.find_customer(name)
         mFee = movie.fee
         prePayment = customer.payment
-        payment = prePayment + mFee
-        print(payment)
+        payment = float(prePayment) + float(mFee)
         if  movie.movie_status == 'Available':
             movie.movie_status = customer.name
             customer.add_movie(movie)
-            print(movie.movie_status)
             customer.payment = payment
         else:
             print("Movie has been rented!")
@@ -175,7 +170,7 @@ class VideoController:
         fee = displayMovie.fee
         print("Name:", displayMovie)
         print("Status:", status)
-        print("Fee:", fee)
+        print("Fee: $", fee)
 
         #display customer details
     def displayCustomer(self,name):
@@ -186,12 +181,12 @@ class VideoController:
         for rentedMovie in rentedMovieList:
             print(rentedMovie) 
         payment = displayCustomer.payment
-        print("Payment:", payment)
+        print("Total payment: $", payment)
         
         
         # track customer's payment
     def trackpayment(self,name):
         cName = self.find_customer(name)
-        payment = cName.fee
-        print (cName + ':' + payment)
+        payment = cName.payment
+        print (cName.name, "Total payment: $", payment)
         

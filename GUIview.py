@@ -26,7 +26,6 @@ for line in customer:
     city = customer_list[1]
     tPayment = float(customer_list[2])
     company.addcustomer(acustomer,city,tPayment)
-    # acustomer.payment = tPayment
 
 # add movie
 for line in movie:
